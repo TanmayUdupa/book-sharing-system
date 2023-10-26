@@ -8,6 +8,4 @@ def home(request):
     return render(request, "app/home.html")
 
 def user_login(request):
-    template = loader.get_template("app/index.html")
-    context = {"user_id" :1}
-    return render(request,"app/index.html",context)
+    return render(request,"app/signin.html")

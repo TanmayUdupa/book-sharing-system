@@ -5,21 +5,19 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Lend-N-Share</title>
 </head>
-<body class="bg-#282828">
+<body class="bg-gray-100">
     <!-----------------------Nav-bar-start---------------------->
-    <nav class="bg-gray-100 py-4 fixed w-full top-0 left-0">
-        <div class="container mx-auto">
-            <ul class="flex justify-end">
-                <li class="inline-block ml-4">
-                    <a href="{%url 'home'%}">Home</a>
-                </li>
-                <li class="inline-block ml-4">
-                    <a href="{% url 'user_login'%}">Login</a>
-                </li>
-            </ul>
+    <nav class="flex bg-gray-100 py-4 fixed w-full top-0 left-0">
+        <div class="flex-none w-32 ml-5">Hello</div>
+        <div class="flex-1 w-64"></div> 
+        <div class="flex-2 w-32 justify-end space-x-2">
+            <a href="{%url 'home'%}"><button>Home</button></a>
+            <a href="{%url 'user_login'%}"><button>Login</button></a>
         </div>
     </nav>
     <!-----------------------Nav-bar-end---------------------->
-
+    <div class="mt-10 pt-5 ml-5">
+        hello
+    </div>
 </body>
 </html>

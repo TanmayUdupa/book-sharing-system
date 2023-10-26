@@ -9,3 +9,6 @@ def home(request):
 
 def user_login(request):
     return render(request,"app/signin.html")
+
+def user_signup(request):
+    return render(request, "app/signup.html")

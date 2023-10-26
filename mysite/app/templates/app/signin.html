@@ -6,19 +6,59 @@
 </head>
 <body>
     <!-----------------------Nav-bar-start---------------------->
-    <nav class="bg-gray-100 py-4 fixed w-full top-0 left-0">
-        <div class="container mx-auto">
-            <ul class="flex justify-end">
-                <li class="inline-block ml-4">
-                    <a href="{%url 'home'%}">Home</a>
-                </li>
-                <li class="inline-block ml-4">
-                    <a href="{% url 'user_login'%}">Login</a>
-                </li>
-            </ul>
+    <nav class="flex bg-gray-100 py-4 fixed w-full top-0 left-0">
+        <div class="flex-none w-32 ml-5">Hello</div>
+        <div class="flex-1 w-64"></div> 
+        <div class="flex-2 w-32 justify-end space-x-2">
+            <a href="{%url 'home'%}"><button>Home</button></a>
+            <a href="{%url 'user_login'%}"><button>Login</button></a>
         </div>
     </nav>
-    <!-----------------------Nav-bar-start---------------------->
+    <!-----------------------Nav-bar-end---------------------->
 
+    <!---------------------- Login-div-start--------------------->
+    <div class="flex items-center min-h-screen p-4 bg-gray-100 lg:justify-center">
+        <div
+          class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
+        >
+          <div class="p-5 bg-white md:flex-1">
+            <h3 class="my-4 text-2xl font-semibold text-gray-700">Account Login</h3>
+            <form action="#" class="flex flex-col space-y-5">
+              <div class="flex flex-col space-y-1">
+                <label for="email" class="text-sm font-semibold text-gray-500">Email address</label>
+                <input
+                  type="email"
+                  id="email"
+                  autofocus
+                  class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
+                />
+              </div>
+              <div class="flex flex-col space-y-1">
+                <div class="flex items-center justify-between">
+                  <label for="password" class="text-sm font-semibold text-gray-500">Password</label>
+                  <a href="#" class="text-sm text-blue-600 hover:underline focus:text-blue-800">Forgot Password?</a>
+                </div>
+                <input
+                  type="password"
+                  id="password"
+                  class="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
+                />
+              </div>
+              <div class="flex items-center space-x-2">
+                <p class="flex  items-center justify-center text-center">
+                    <span>Don't have an account?</span>
+                    &nbsp;<a href="{%url 'user_signup' %}" class="underline">Get Started!</a>
+                </p>
+              </div>
+              <div>
+                <button
+                  type="submit"
+                  class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-blue-500 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
+                >
+                  Log in
+                </button>
+              </div>
+        <!---------------------- Login-div-end--------------------->
+              
 </body>
 </html>

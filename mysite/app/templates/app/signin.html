@@ -1,8 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="https://cdn.tailwindcss.com"></script>    
+    <script src="https://cdn.tailwindcss.com"></script>  
     <title>User Login</title>
+    <style>
+        div.error {
+            padding: 10px;
+            background: #ffefef;
+            border: 1px solid #e7195a;
+            color: #e7195a;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+    </style>
 </head>
 <body>
     <!-----------------------Nav-bar-start---------------------->
@@ -23,6 +33,9 @@
         >
           <div class="p-5 bg-white md:flex-1">
             <h3 class="my-4 text-2xl font-semibold text-gray-700">Account Login</h3>
+            {%if error %}
+                <div class = "error"> Invalid Email or Password </div> 
+            {% endif%}
             <form method="post">
               {% csrf_token %}
               <div class="flex flex-col space-y-5">

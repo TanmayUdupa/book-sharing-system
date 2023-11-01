@@ -6,14 +6,17 @@ from django.contrib.auth import login
 from .forms import LoginForm, SignUpForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.csrf import csrf_protect
 def home(request):
     return render(request, "app/home.html")
 
 @login_required(login_url='/user_login/')
 def feed(request):
-    return render(request, 'app/feed.html')
+    user = request.user
+    context = {'user': user}
+    return render(request, 'app/feed.html',context=context)
 
+@csrf_protect
 def user_login(request):
     error = 0
     if request.method == 'POST':
@@ -34,6 +37,7 @@ def user_login(request):
 
     return render(request, 'app/signin.html', {'form': form, 'error': error})
 
+@csrf_protect
 def user_signup(request):
     if request.method == 'POST':
         form = SignUpForm(request.POST)

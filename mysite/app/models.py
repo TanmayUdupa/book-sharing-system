@@ -34,13 +34,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-#class User(models.Model):
-#    name = models.CharField(max_length = 50)
-    # profile_pic = models.ImageField(upload_to = "/images")
-#    password = models.CharField(max_length = 200)
-#    email = models.EmailField(max_length = 50)
-#    rating = models.DecimalField(default = 0.0, decimal_places = 1, max_digits = 2)
-
 class Genre(models.Model):
     name = models.CharField(max_length = 50)
     description = models.TextField(max_length = 200)

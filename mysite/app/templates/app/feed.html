@@ -6,12 +6,13 @@
 </head>
 <body>
         <!-----------------------Nav-bar-start---------------------->
-        <nav class="flex bg-gray-100 py-4 fixed w-full top-0 left-0">
+        <nav class="flex py-4 fixed w-full top-0 left-0">
             <div class="flex-none w-32 ml-5"></div>
-            <div class="flex-1 w-64"></div> 
-            <div class="flex-2 w-32 justify-end space-x-2">
-                <a href="{%url 'feed'%}"><button>Home</button></a>
-            </div>
+            <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
+                <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
+                <a class="transition-transform transform hover:scale-105" href="{%url 'user_login'%}"><button>Login</button></a>
+            </div> 
+            <div class="flex-2 w-32"></div>
         </nav>
         <!-----------------------Nav-bar-end---------------------->
 </body>

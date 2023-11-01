@@ -2,12 +2,15 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
 from .models import User
+from django.contrib.auth import login
 from .forms import LoginForm, SignUpForm
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, "app/home.html")
 
+@login_required(login_url='/user_login/')
 def feed(request):
     return render(request, 'app/feed.html')
 
@@ -17,18 +20,13 @@ def user_login(request):
         form = LoginForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             x = None
-            for i in User.objects.all():
-                if (email == i.email):
-                    x = i
-                    break
-            if (x):
-                password = form.cleaned_data['password']
-                check = check_password(password, x.password)
-                if check:
-                    return redirect('feed')
-                else:
-                    error = 1
+            user = User.objects.filter(email=email).first()
+            if user and check_password(password, user.password):
+                login(request, user)
+                next_url = request.GET.get('next', '/feed/')
+                return redirect(next_url)
             else:
                 error = 1
     else:

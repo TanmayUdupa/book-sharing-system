@@ -1,13 +1,38 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 # Create your models here.
 
-class User(models.Model):
-    name = models.CharField(max_length = 50)
-    # profile_pic = models.ImageField(upload_to = "/images")
-    password = models.CharField(max_length = 200)
-    email = models.EmailField(max_length = 50)
-    rating = models.DecimalField(default = 0.0, decimal_places = 1, max_digits = 2)
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, name, password=None):
+        if not email:
+            raise ValueError('The email field is not set')
+        email = self.normalize_email(email=email)
+        user = self.model(email=email, name=name)
+        user.set_password(password)
+        user.save(using=self.db)
+        return user
+    
+    def create_superuser(self, email, name, password):
+        user = self.create_user(email, name, password)
+        user.is_staff=True
+        user.is_superuser=True
+        user.save(using=self.db)
+        return user
+class User(AbstractBaseUser, PermissionsMixin):
+    email = models.EmailField(unique=True)
+    name = models.CharField(max_length=50)
+    rating = models.DecimalField(default=0.0, decimal_places=1, max_digits=3)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name']
+
+    def __str__(self):
+        return self.email
 
 class Genre(models.Model):
     name = models.CharField(max_length = 50)

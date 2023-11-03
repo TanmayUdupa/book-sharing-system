@@ -1,19 +1,22 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.template import loader
-from .models import User
-from django.contrib.auth import login
+from .models import User, RequestsToBorrow
+from django.contrib.auth import login, logout
 from .forms import LoginForm, SignUpForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 def home(request):
-    return render(request, "app/home.html")
+    user = request.user
+    context = {'user': user}
+    return render(request, "app/home.html", context = context)
 
 @login_required(login_url='/user_login/')
 def feed(request):
     user = request.user
-    context = {'user': user}
+    requests = RequestsToBorrow.objects.all()
+    context = {'user': user, 'requests': requests}
     return render(request, 'app/feed.html',context=context)
 
 @csrf_protect
@@ -53,3 +56,6 @@ def user_signup(request):
             form = SignUpForm()
     return render(request, "app/signup.html",{'form':form})
 
+def user_logout(request):
+    logout(request)
+    return(redirect('home'))

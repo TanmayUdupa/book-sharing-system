@@ -13,7 +13,11 @@
         <div class="flex-none w-32 ml-5"></div>
         <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
             <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
+            {% if not user.is_authenticated %}
             <a class="transition-transform transform hover:scale-105" href="{%url 'user_login'%}"><button>Login</button></a>
+            {% else %}
+            <a class="transition-transform transform hover:scale-105" href="{%url 'user_logout'%}"><button>Logout</button></a>
+            {% endif %}
         </div> 
         <div class="flex-2 w-32"></div>
     </nav>

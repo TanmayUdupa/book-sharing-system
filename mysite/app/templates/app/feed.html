@@ -12,12 +12,19 @@
             <div class="flex-none w-32 ml-5"></div>
             <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
                 <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
+                <a class="transition-transform transform hover:scale-105" href="{%url 'user_logout'%}"><button>Logout</button></a>
             </div> 
             <div class="flex-2 w-32"></div>
         </nav>
         <!-----------------------Nav-bar-end---------------------->
-    
     <p>Hello, {{ user.name }}!</p>
     <p>Your email is {{ user.email }}.</p>
+    {% if requests %}
+        <ul>
+        {%for request in requests %}
+            <li>{{request.borrower_id}}</li>
+        {%endfor%}
+        </ul>
+    {% endif%}
 </body>
 </html>

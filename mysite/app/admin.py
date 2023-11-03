@@ -5,7 +5,18 @@ from .models import Book,Genre, BookReview, RequestsToBorrow, ShippedTo, Wishlis
 
 class CustomUserAdmin(UserAdmin):
     list_display = ('email', 'name', 'rating', 'is_staff')
-    ordering = ('email',)  
+    ordering = ('email',) 
+    fieldsets = (
+        (None, {
+            'fields': ('email', 'name', 'profile_pic', 'rating', 'is_staff'),
+        }),
+    )  
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'name', 'profile_pic', 'rating', 'is_staff'),
+        }),
+    )
 
 admin.site.register(Book)
 admin.site.register(Genre)

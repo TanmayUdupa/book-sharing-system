@@ -18,6 +18,7 @@
         </nav>
         <!-----------------------Nav-bar-end---------------------->
     <p>Hello, {{ user.name }}!</p>
+    <img src="{{ user.profile_pic.url }}" width = '300'/>
     <p>Your email is {{ user.email }}.</p>
     {% if requests %}
         <ul>

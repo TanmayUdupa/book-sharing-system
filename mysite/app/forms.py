@@ -31,3 +31,8 @@ class SignUpForm(forms.Form):
             'class': 'px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200',
         }), required=True
     )
+    profile_pic = forms.ImageField(
+        widget=forms.FileInput(attrs={
+            'class': 'px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200',
+        }), required=True
+    )

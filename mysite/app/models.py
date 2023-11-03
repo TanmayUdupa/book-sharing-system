@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils.html import mark_safe
 
 # Create your models here.
 
@@ -23,6 +24,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=50)
     profile_pic = models.ImageField(upload_to = 'images/', default='default.jpg')
+    def img_preview(self): #new
+        return mark_safe(f'<img src = "{self.product_img.url}" width = "300"/>')
     rating = models.DecimalField(default=0.0, decimal_places=1, max_digits=3)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -48,7 +51,7 @@ class Book(models.Model):
     genre_id = models.ForeignKey(Genre, on_delete=models.CASCADE)
     publication_year = models.IntegerField(default = 1)
     description = models.TextField(default = "Nice", max_length = 200)
-    # cover_image = models.ImageField(upload_to="/images")
+    cover_image = models.ImageField(upload_to="images/", default='default_cover.jpg')
     owner_id = models.ForeignKey(User, on_delete=models.CASCADE)
     condition_desc = models.CharField(default = 'Good', max_length = 50)
     status = models.CharField(default = "Available", max_length=50)

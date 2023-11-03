@@ -1,23 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <title>Feed</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body>
-        <!-----------------------Nav-bar-start---------------------->
-        <nav class="flex py-4 fixed w-full top-0 left-0">
-            <div class="flex-none w-32 ml-5"></div>
-            <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
-                <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
-                <a class="transition-transform transform hover:scale-105" href="{%url 'feed'%}"><button>Feed</button></a>
-                <a class="transition-transform transform hover:scale-105" href="{%url 'user_logout'%}"><button>Logout</button></a>
-            </div> 
-            <div class="flex-2 w-32"></div>
-        </nav>
-        <!-----------------------Nav-bar-end---------------------->
+{% extends './base.html' %}
+
+{% block content %}
     <p>Hello, {{ user.name }}!</p>
     <img src="{{ user.profile_pic.url }}" width = '300'/>
     <p>Your email is {{ user.email }}.</p>
@@ -28,5 +11,5 @@
         {%endfor%}
         </ul>
     {% endif%}
-</body>
-</html>
+
+{% endblock %}

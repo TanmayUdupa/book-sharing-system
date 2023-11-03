@@ -65,7 +65,6 @@ class BookReview(models.Model):
 
 class Wishlist(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    # List_of_Book_ID = 
     last_updated = models.DateField()
     is_public = models.BooleanField()
 

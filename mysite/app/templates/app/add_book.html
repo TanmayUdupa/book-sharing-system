@@ -1,0 +1,51 @@
+{% extends './base.html' %}
+
+{% block content %}
+<div class="flex items-center min-h-screen p-4 lg:justify-center">
+    <div
+      class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
+    >
+      <div class="p-5 bg-white md:flex-1">
+        <h3 class="my-4 text-2xl font-semibold text-gray-700">Add a Book</h3>
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          <div class="flex flex-col space-y-5">
+              <div class="flex flex-col space-y-1">
+                  <label for="{{ form.title.id_for_label }}" class="text-sm font-semibold text-gray-500">Title</label>
+                  {{ form.title }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                  <label for="{{ form.author.id_for_label }}" class="text-sm font-semibold text-gray-500">Author</label>
+                  {{ form.author }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                  <label for="{{ form.isbn.id_for_label }}" class="text-sm font-semibold text-gray-500">ISBN</label>
+                  {{ form.isbn }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                <label for="{{ form.genre_id.id_for_label }}" class="text-sm font-semibold text-gray-500">Genre</label>
+                {{ form.genre_id }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                <label for="{{ form.publication_year.id_for_label }}" class="text-sm font-semibold text-gray-500">Publication Year</label>
+                {{ form.publication_year }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                <label for="{{ form.description.id_for_label }}" class="text-sm font-semibold text-gray-500">Description</label>
+                {{ form.description }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                <label for="{{ form.cover_image.id_for_label }}" class="text-sm font-semibold text-gray-500">Cover Image</label>
+                {{ form.cover_image }}
+              </div>
+              <div class="flex flex-col space-y-1">
+                <label for="{{ form.condition_desc.id_for_label }}" class="text-sm font-semibold text-gray-500">Condition Description</label>
+                {{ form.condition_desc }}
+              </div>
+              <div>
+                <button type="submit" class="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-amber-600 rounded-md shadow hover:bg-amber-700 focus:outline-none focus:ring-amber-200 focus:ring-4">Add Book</button>
+            </div>
+          </div>
+       </form>
+
+{% endblock %}

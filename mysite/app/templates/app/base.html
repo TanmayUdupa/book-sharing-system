@@ -9,8 +9,14 @@
 </head>
 <body>
     <!-----------------------Nav-bar-start---------------------->
-    <nav class="flex py-4 fixed w-full top-0 left-0">
-        <div class="flex-none w-32 ml-5"></div>
+    <nav class="flex py-4 fixed w-full top-0 left-0 bg-amber-600 text-white">
+        <div class="flex space-x-10 w-32 ml-5">
+            {% if user.is_authenticated %}
+            <p>Hello, {{ user.name }}!</p>
+            <img class="w-auto h-10 rounded scale-125" src="{{ user.profile_pic.url }}"/>
+            <p>Your email is {{ user.email }}.</p>
+            {% endif %}
+        </div>
         <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
             <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
             {% if not user.is_authenticated %}

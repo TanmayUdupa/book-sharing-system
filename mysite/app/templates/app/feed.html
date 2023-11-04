@@ -1,15 +1,20 @@
 {% extends './base.html' %}
 
 {% block content %}
-    <p>Hello, {{ user.name }}!</p>
-    <img src="{{ user.profile_pic.url }}" width = '300'/>
-    <p>Your email is {{ user.email }}.</p>
-    {% if requests %}
-        <ul>
-        {%for request in requests %}
-            <li>{{request.borrower_id}}</li>
+    {% if available_books %}
+        {%for book in available_books %}
+            <ul class = "mt-20 p-5">
+                <li>{{book.title}}</li>
+                <li>{{book.author}}</li>
+                <li>{{book.isbn}}</li>
+                <li>{{book.genre.name}}</li>
+                <li>{{book.publication_year}}</li>
+                <li>{{book.description}}</li>
+                <li><img class = "w-56 h-auto" src="{{book.cover_image.url}}"/></li>
+                <li>{{book.owner.name}}</li>
+                <li>{{book.condition_desc}}</li>
+            </ul>
         {%endfor%}
-        </ul>
     {% endif%}
 
 {% endblock %}

@@ -15,8 +15,8 @@ def home(request):
 @login_required(login_url='/user_login/')
 def feed(request):
     user = request.user
-    requests = RequestsToBorrow.objects.all()
-    context = {'user': user, 'requests': requests}
+    available_books = Book.objects.filter(status = "AVAILABLE").exclude(owner = user)
+    context = {'user': user, 'available_books': available_books}
     return render(request, 'app/feed.html',context=context)
 
 @login_required(login_url='/user_login/')

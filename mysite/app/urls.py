@@ -7,5 +7,6 @@ urlpatterns = [
     path('user_signup/',views.user_signup,name="user_signup"),
     path('feed/',views.feed,name='feed'),
     path('user_logout/', views.user_logout, name = 'user_logout'),
-    path('add_book/', views.add_book, name = 'add_book')
+    path('add_book/', views.add_book, name = 'add_book'),
+    path('create_borrowing_request/<int:book_id>/',views.create_borrowing_request, name='create_borrowing_request')
 ]

@@ -1,9 +1,10 @@
 {% extends './base.html' %}
 
 {% block content %}
+    <div class="flex flex-wrap justify-center">
     {% if available_books %}
         {%for book in available_books %}
-            <ul class = "mt-20 p-5">
+            <!--ul class = "mt-20 p-5">
                 <li>{{book.title}}</li>
                 <li>{{book.author}}</li>
                 <li>{{book.isbn}}</li>
@@ -13,8 +14,81 @@
                 <li><img class = "w-56 h-auto" src="{{book.cover_image.url}}"/></li>
                 <li>{{book.owner.name}}</li>
                 <li>{{book.condition_desc}}</li>
-            </ul>
+            </ul-->
+            <div class="max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 bg-white relative transition-transform hover:scale-105">
+                <img class="w-full h-48 object-cover" src="{{book.cover_image.url}}" alt="{{book.title}}">
+                <div class="px-6 py-4">
+                    <div class="font-bold text-xl mb-2">{{book.title}}</div>
+                    <p class="text-gray-700 text-base">{{book.description}}</p>
+                    <div class="mt-2 flex items-center justify-center">
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.publication_year}}</span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.genre.name}}</span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.condition_desc}}</span>
+                    </div>
+                    <div class="mt-4 flex justify-center">
+                        {% if book.id in requested_book_ids %}
+                        <button class="bg-gray-300 text-gray-600 py-2 px-4 rounded-full text-sm font-semibold cursor-not-allowed" disabled>Already Requested</button>
+                    {% else %}
+                        <a id="{{book.id}}" href="" class="add-book-button bg-blue-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition-transform transform hover:scale-105">Add This Book</a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            
         {%endfor%}
     {% endif%}
+</div>
+<script>
+    $(document).ready(function(){
+        
+        var csrftoken = getCookie('csrftoken');
+        
 
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        $('.add-book-button').on('click', function(event){
+            event.preventDefault();
+            var button = $(this);
+            var bookId = $(this).attr('id');
+            console.log(bookId);
+
+            $.ajax({
+                url: '/create_borrowing_request/'+bookId+'/',
+                method : 'POST',
+                headers:{
+                    'X-CSRFToken' : csrftoken
+                },
+                success: function(response){
+                    if(response.success){
+                        console.log('Success')
+                        button.attr('disabled', true)
+                            .removeClass('bg-blue-500')
+                            .addClass('bg-gray-300 text-gray-600 cursor-not-allowed')
+                            .text('Already Requested');
+
+                    }else{
+                        console.log('Error')
+                    }
+                },
+                error:function(error){
+                    console.log(error.statusText);
+                }
+            })
+        })
+    })
+</script>
 {% endblock %}

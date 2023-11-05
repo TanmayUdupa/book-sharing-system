@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://unpkg.com/@mui/material@latest/umd/material-ui.production.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -9,13 +10,8 @@
 </head>
 <body>
     <!-----------------------Nav-bar-start---------------------->
-    <nav class="flex py-4 fixed w-full top-0 left-0 bg-amber-600 text-white">
+    <nav class="flex py-4 w-full top-0 left-0 text-black bg-amber-100">
         <div class="flex space-x-10 w-32 ml-5">
-            {% if user.is_authenticated %}
-            <p>Hello, {{ user.name }}!</p>
-            <img class="w-auto h-10 rounded scale-125" src="{{ user.profile_pic.url }}"/>
-            <p>Your email is {{ user.email }}.</p>
-            {% endif %}
         </div>
         <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
             <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
@@ -27,11 +23,18 @@
             <a class="transition-transform transform hover:scale-105" href="{%url 'user_logout'%}"><button>Logout</button></a>
             {% endif %}
         </div> 
-        <div class="flex-2 w-32"></div>
+        <div class="flex-2 w-32 flex items-center space-x-2">
+            {% if user.is_authenticated %}
+            <img class="w-auto h-10 rounded scale-125" src="{{ user.profile_pic.url }}"/>
+            <p>{{ user.name }}</p>
+            {% endif %}
+        </div>
     </nav>
     <!-----------------------Nav-bar-end---------------------->
+    <div class="pt-10">
     {% block content %}
 
     {% endblock %}
+    </div>
 </body>
 </html>

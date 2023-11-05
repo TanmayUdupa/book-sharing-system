@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.template import loader
 from .models import User, RequestsToBorrow, Book, Genre
 from django.contrib.auth import login, logout
@@ -7,6 +7,8 @@ from .forms import LoginForm, SignUpForm, AddBookForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
+from django.utils import timezone
+from datetime import timedelta
 def home(request):
     user = request.user
     context = {'user': user}
@@ -16,7 +18,13 @@ def home(request):
 def feed(request):
     user = request.user
     available_books = Book.objects.filter(status = "AVAILABLE").exclude(owner = user)
-    context = {'user': user, 'available_books': available_books}
+    requested_book_ids = RequestsToBorrow.objects.filter(borrower_id=user).values_list('book_id', flat=True)
+
+    context = {
+        'user': user,
+        'available_books': available_books,
+        'requested_book_ids':requested_book_ids,
+        }
     return render(request, 'app/feed.html',context=context)
 
 @login_required(login_url='/user_login/')
@@ -88,6 +96,22 @@ def user_signup(request):
     else:
             form = SignUpForm()
     return render(request, "app/signup.html",{'form':form})
+
+@csrf_protect
+def create_borrowing_request(request, book_id):
+    if request.method == 'POST':
+        borrower = request.user
+        book = Book.objects.get(id=book_id)
+        print(borrower)
+        requestsToBorrow = RequestsToBorrow(
+            borrower_id = borrower,
+            request_date = timezone.now(),
+            book_id = book,
+            status="pending",
+            due_date = timezone.now() + timedelta(days=30),
+        )
+        requestsToBorrow.save()
+        return JsonResponse({'success':True})
 
 def user_logout(request):
     logout(request)

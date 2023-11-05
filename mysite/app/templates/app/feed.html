@@ -26,7 +26,11 @@
                         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.condition_desc}}</span>
                     </div>
                     <div class="mt-4 flex justify-center">
-                        <a href="" class="bg-blue-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition-transform transform hover:scale-105">Add This Book</a>
+                        {% if book.id in requested_book_ids %}
+                        <button class="bg-gray-300 text-gray-600 py-2 px-4 rounded-full text-sm font-semibold cursor-not-allowed" disabled>Already Requested</button>
+                    {% else %}
+                        <a id="{{book.id}}" href="" class="add-book-button bg-blue-500 text-white py-2 px-4 rounded-full text-sm font-semibold transition-transform transform hover:scale-105">Add This Book</a>
+                    {% endif %}
                     </div>
                 </div>
             </div>
@@ -35,4 +39,56 @@
         {%endfor%}
     {% endif%}
 </div>
+<script>
+    $(document).ready(function(){
+        
+        var csrftoken = getCookie('csrftoken');
+        
+
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        
+        $('.add-book-button').on('click', function(event){
+            event.preventDefault();
+            var button = $(this);
+            var bookId = $(this).attr('id');
+            console.log(bookId);
+
+            $.ajax({
+                url: '/create_borrowing_request/'+bookId+'/',
+                method : 'POST',
+                headers:{
+                    'X-CSRFToken' : csrftoken
+                },
+                success: function(response){
+                    if(response.success){
+                        console.log('Success')
+                        button.attr('disabled', true)
+                            .removeClass('bg-blue-500')
+                            .addClass('bg-gray-300 text-gray-600 cursor-not-allowed')
+                            .text('Already Requested');
+
+                    }else{
+                        console.log('Error')
+                    }
+                },
+                error:function(error){
+                    console.log(error.statusText);
+                }
+            })
+        })
+    })
+</script>
 {% endblock %}

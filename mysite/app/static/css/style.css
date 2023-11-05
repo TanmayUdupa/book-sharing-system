@@ -10,4 +10,5 @@ div.error {
 body {
     background-image: url('../Home.png');
     background-size: cover;
+    background-position: center;
 }

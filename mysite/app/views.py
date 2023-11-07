@@ -9,21 +9,36 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import F
 def home(request):
     user = request.user
-    context = {'user': user}
+    requested_books = RequestsToBorrow.objects.filter(borrower_id=user)
+    requested_books_with_details = requested_books.select_related('book_id')
+    requested_books_with_details = requested_books_with_details.annotate(
+        book_status=F('status')
+    )
+    context = {
+        'user': user,
+        'requested_books':requested_books_with_details,
+        }
     return render(request, "app/home.html", context = context)
 
 @login_required(login_url='/user_login/')
 def feed(request):
     user = request.user
     available_books = Book.objects.filter(status = "AVAILABLE").exclude(owner = user)
-    requested_book_ids = RequestsToBorrow.objects.filter(borrower_id=user).values_list('book_id', flat=True)
+    requested_books = RequestsToBorrow.objects.filter(borrower_id=user)
+    requested_book_ids = requested_books.values_list('book_id', flat=True)
+    requested_books_with_details = requested_books.select_related('book_id')
+    requested_books_with_details = requested_books_with_details.annotate(
+        book_status=F('status')
+    )
 
     context = {
         'user': user,
         'available_books': available_books,
         'requested_book_ids':requested_book_ids,
+        'requested_books':requested_books_with_details,
         }
     return render(request, 'app/feed.html',context=context)
 
@@ -112,6 +127,15 @@ def create_borrowing_request(request, book_id):
         )
         requestsToBorrow.save()
         return JsonResponse({'success':True})
+
+@csrf_protect
+def delete_borrowing_request(request, book_id):
+    if request.method == 'POST':
+        borrower = request.user
+        borrowRequest = RequestsToBorrow.objects.filter(borrower_id = borrower, book_id = Book.objects.get(id=book_id))
+        borrowRequest.delete()
+        return JsonResponse({'success':True})
+
 
 def user_logout(request):
     logout(request)

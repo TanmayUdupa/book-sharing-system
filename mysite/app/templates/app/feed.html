@@ -1,6 +1,40 @@
 {% extends './base.html' %}
 
 {% block content %}
+    <div class = "view-requests">
+        <dialog class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+            <div class="bg-white p-8 rounded-lg">
+                <div class="flex items-center justify-center">
+                <h2 class="text-2xl font-bold mb-4">Requested Books</h2>
+                </div>
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b">
+                            <th class="text-left text-xl py-2 px-4">Book Title</th>
+                            <th class="text-left text-xl py-2 px-4">Status</th>
+                            <th class="text-left text-xl py-2 px-4">Owner</th>
+                            <th class="text-left text-xl py-2 px-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requested_books %}
+                            <tr class="border-b" id="{{request.book_id.id}}">
+                                <td class="text-left py-2 px-4">{{ request.book_id.title }}</td>
+                                <td class="text-left py-2 px-4">{{ request.book_status }}</td>
+                                <td class="text-left py-2 px-4">{{ request.book_id.owner.name}}</td>
+                                <td><button class="delete-button bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" id="{{request.book_id.id}}">Delete</button></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="mt-10 mb-1 flex items-center justify-center">
+                <button  class="modal-button bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">Close</button>
+                <button  class="ml-10 modal-button bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded" autofocus>Confirm</button>
+                </div>
+            </div>
+        </dialog>
+        <button class="transition-transform transform hover:scale-105 modal-button">View Requests</button>
+    </div>
     <div class="flex flex-wrap justify-center">
     {% if available_books %}
         {%for book in available_books %}
@@ -90,5 +124,60 @@
             })
         })
     })
+    const dialog = document.querySelector("dialog");
+    const showButton = document.querySelector("dialog + .modal-button");
+    const closeButton = document.querySelector("dialog .modal-button");
+
+    showButton.addEventListener("click", () => {
+        dialog.showModal();
+    });
+
+    closeButton.addEventListener("click", () => {
+        dialog.close();
+    });
+
+    $(document).ready(function(){
+                
+    var csrftoken = getCookie('csrftoken');
+    
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+        $('.delete-button').on('click', function(event){
+            event.preventDefault();
+            var book_id = $(this).attr("id")
+            var $tr = $(this).closest('tr');
+            if(confirm("Do you want to delete this item?")){
+                $.ajax({
+                    url : '/delete_borrowing_request/'+book_id+'/',
+                    method : 'POST',
+                    headers : {
+                        'X-CSRFToken' : csrftoken
+                    },
+                    success: function(response){
+                        if(response.success){
+                            console.log("Success delete")
+                            $tr.remove()
+                        }else{
+                            console.log("Failed")
+                        }
+                    }
+                })
+            }
+        });
+    });
 </script>
 {% endblock %}

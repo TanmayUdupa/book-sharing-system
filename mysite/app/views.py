@@ -11,6 +11,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import F
 def home(request):
+    '''
     user = request.user
     requested_books = RequestsToBorrow.objects.filter(borrower_id=user)
     requested_books_with_details = requested_books.select_related('book_id')
@@ -21,7 +22,8 @@ def home(request):
         'user': user,
         'requested_books':requested_books_with_details,
         }
-    return render(request, "app/home.html", context = context)
+    '''
+    return render(request, "app/home.html")
 
 @login_required(login_url='/user_login/')
 def feed(request):
@@ -144,6 +146,26 @@ def confirm_borrowing_request(request):
         request.status = 'Waiting for request approval'
         request.save()
     return JsonResponse({'success':True})
+
+@csrf_protect
+def approve_request(request, request_id):
+    user = request.user
+    requests = RequestsToBorrow.objects.filter(book_id__owner = user, status = "Waiting for request approval", id = request_id)
+    for request in requests:
+        request.status = 'Request approved'
+        request.save()
+    return JsonResponse({'success':True})
+
+@login_required(login_url='/user_login/')
+def view_received_requests(request):
+    user = request.user
+    requests = RequestsToBorrow.objects.filter(status = 'Waiting for request approval', book_id__owner = user)
+    context = {
+        'user': user,
+        'requests': requests
+        }
+    return render(request, 'app/view_received_requests.html',context=context)
+    
 
 def user_logout(request):
     logout(request)

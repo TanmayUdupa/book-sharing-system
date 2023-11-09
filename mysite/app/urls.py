@@ -9,5 +9,6 @@ urlpatterns = [
     path('user_logout/', views.user_logout, name = 'user_logout'),
     path('add_book/', views.add_book, name = 'add_book'),
     path('create_borrowing_request/<int:book_id>/',views.create_borrowing_request, name='create_borrowing_request'),
-    path('delete_borrowing_request/<int:book_id>/', views.delete_borrowing_request, name="delete_borrowing_request")
+    path('delete_borrowing_request/<int:book_id>/', views.delete_borrowing_request, name="delete_borrowing_request"),
+    path('confirm_borrowing_request/', views.confirm_borrowing_request, name="confirm_borrowing_request")
 ]

@@ -22,14 +22,18 @@
                                 <td class="text-left py-2 px-4">{{ request.book_id.title }}</td>
                                 <td class="text-left py-2 px-4">{{ request.book_status }}</td>
                                 <td class="text-left py-2 px-4">{{ request.book_id.owner.name}}</td>
-                                <td><button class="delete-button bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" id="{{request.book_id.id}}">Delete</button></td>
+                                {% if request.status == "Waiting for confirmation" %}
+                                    <td><button class="delete-button bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" id="{{request.book_id.id}}">Delete</button></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 <div class="mt-10 mb-1 flex items-center justify-center">
                 <button  class="modal-button bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded">Close</button>
-                <button  class="ml-10 modal-button bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded" autofocus>Confirm</button>
+                {% if request.status == "Waiting for confirmation" %}
+                    <button  class="confirm ml-10 modal-button bg-amber-500 hover:bg-amber-700 text-white font-bold py-2 px-4 rounded" autofocus>Confirm</button>
+                {% endif %}
                 </div>
             </div>
         </dialog>
@@ -38,17 +42,6 @@
     <div class="flex flex-wrap justify-center">
     {% if available_books %}
         {%for book in available_books %}
-            <!--ul class = "mt-20 p-5">
-                <li>{{book.title}}</li>
-                <li>{{book.author}}</li>
-                <li>{{book.isbn}}</li>
-                <li>{{book.genre.name}}</li>
-                <li>{{book.publication_year}}</li>
-                <li>{{book.description}}</li>
-                <li><img class = "w-56 h-auto" src="{{book.cover_image.url}}"/></li>
-                <li>{{book.owner.name}}</li>
-                <li>{{book.condition_desc}}</li>
-            </ul-->
             <div class="max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 bg-white relative transition-transform hover:scale-105">
                 <img class="h-96 w-full" src="{{book.cover_image.url}}" alt="{{book.title}}">
                 <div class="px-6 py-4">
@@ -179,5 +172,48 @@
             }
         });
     });
+
+    $(document).ready(function(){
+                
+        var csrftoken = getCookie('csrftoken');
+        
+    
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    
+            $('.confirm').on('click', function(event){
+                event.preventDefault();
+                    $.ajax({
+                        url : '/confirm_borrowing_request/',
+                        method : 'POST',
+                        headers : {
+                            'X-CSRFToken' : csrftoken
+                        },
+                        success: function(response){
+                            if(response.success){
+                                console.log("Requests confirmed")
+                                $('.delete-button').attr('disabled', true)
+                                .removeClass('bg-red-500')
+                                .addClass('bg-gray-300 text-gray-600 cursor-not-allowed')
+                            }else{
+                                console.log("Failed")
+                            }
+                        }
+                    })
+            });
+        });    
+
 </script>
 {% endblock %}

@@ -122,7 +122,7 @@ def create_borrowing_request(request, book_id):
             borrower_id = borrower,
             request_date = timezone.now(),
             book_id = book,
-            status="pending",
+            status="Waiting for confirmation",
             due_date = timezone.now() + timedelta(days=30),
         )
         requestsToBorrow.save()
@@ -136,6 +136,14 @@ def delete_borrowing_request(request, book_id):
         borrowRequest.delete()
         return JsonResponse({'success':True})
 
+@csrf_protect
+def confirm_borrowing_request(request):
+    borrower = request.user
+    requests = RequestsToBorrow.objects.filter(borrower_id = borrower, status = "Waiting for confirmation")
+    for request in requests:
+        request.status = 'Waiting for request approval'
+        request.save()
+    return JsonResponse({'success':True})
 
 def user_logout(request):
     logout(request)

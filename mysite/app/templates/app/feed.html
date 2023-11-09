@@ -1,8 +1,9 @@
 {% extends './base.html' %}
 
 {% block content %}
-    <div class = "view-requests">
-        <dialog class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
+    <div>
+    <div class = "view-requests flex items-center justify-center">
+        <dialog class="fixed top-1/2 left-1/4 transform -translate-x-1/2 -translate-y-1/2 rounded">
             <div class="bg-white p-8 rounded-lg">
                 <div class="flex items-center justify-center">
                 <h2 class="text-2xl font-bold mb-4">Requested Books</h2>
@@ -33,7 +34,7 @@
                 </div>
             </div>
         </dialog>
-        <button class="transition-transform transform hover:scale-105 modal-button">View Requests</button>
+        <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold py-2 px-4 border border-blue-500 transition-transform transform hover:scale-105 hover:text-white hover:border-transparent rounded modal-button">View Requests</button>
     </div>
     <div class="flex flex-wrap justify-center">
     {% if available_books %}

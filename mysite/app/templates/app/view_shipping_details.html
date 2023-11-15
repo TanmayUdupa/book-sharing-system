@@ -1,0 +1,27 @@
+{% extends './base.html' %}
+
+{% block content %}
+        <table class="w-full border-collapse">
+            <thead>
+                <tr class="border-b">
+                    <th class="text-left text-xl py-2 px-4">Book Title</th>
+                    <th class="text-left text-xl py-2 px-4">From Address</th>
+                    <th class="text-left text-xl py-2 px-4">To Address</th>
+                    <th class="text-left text-xl py-2 px-4">Status</th>
+                    <th class="text-left text-xl py-2 px-4">Transaction Type</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for shipping_detail in shipping_details %}
+                    <tr class="border-b">
+                        <td class="text-left py-2 px-4">{{ shipping_detail.book_id.title }}</td>
+                        <td class="text-left py-2 px-4">{{ shipping_detail.from_user.address }}</td>
+                        <td class="text-left py-2 px-4">{{ shipping_detail.to_user.address}}</td>
+                        <td class="text-left py-2 px-4">{{ shipping_detail.status}}</td>
+                        <td class="text-left py-2 px-4">{{ shipping_detail.transaction_type}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+{% endblock %}

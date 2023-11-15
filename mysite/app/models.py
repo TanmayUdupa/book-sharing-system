@@ -65,8 +65,8 @@ class BookReview(models.Model):
 class ShippedTo(models.Model):
     status = models.CharField(max_length = 50)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
-    from_address = models.TextField(max_length = 200)
-    to_address = models.TextField(max_length=200)
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='from_user', default = 1)
+    to_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='to_user', default = 1)
     transaction_type = models.CharField(max_length = 50)
 
 class RequestsToBorrow(models.Model):

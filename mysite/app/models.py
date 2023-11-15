@@ -24,6 +24,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=50)
     profile_pic = models.ImageField(upload_to = 'images/', default='default.jpg')
+    address = models.TextField(max_length=100, default="Earth")
     def img_preview(self): #new
         return mark_safe(f'<img src = "{self.product_img.url}" width = "300"/>')
     rating = models.DecimalField(default=0.0, decimal_places=1, max_digits=3)
@@ -60,11 +61,6 @@ class BookReview(models.Model):
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     review_text = models.TextField(max_length=200)
     rating = models.IntegerField()
-
-class Wishlist(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    last_updated = models.DateField()
-    is_public = models.BooleanField()
 
 class ShippedTo(models.Model):
     status = models.CharField(max_length = 50)

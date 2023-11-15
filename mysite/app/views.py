@@ -106,8 +106,9 @@ def user_signup(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             encrypted_password = make_password(password)
+            address = form.cleaned_data['address']
             profile_pic = form.cleaned_data['profile_pic']
-            user = User(name = name, email = email, password = encrypted_password, profile_pic = profile_pic)
+            user = User(name = name, email = email, password = encrypted_password, address = address, profile_pic = profile_pic)
             user.save()
             return(redirect('user_login'))
     else:

@@ -166,6 +166,13 @@ def view_received_requests(request):
         }
     return render(request, 'app/view_received_requests.html',context=context)
     
+@login_required(login_url='/user_login/')
+def view_profile(request):
+    user = request.user
+    context = {
+        'user' : user,
+    }
+    return render(request, 'app/profile.html', context=context)
 
 def user_logout(request):
     logout(request)

@@ -3,12 +3,21 @@
 <head>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/book.ico'%}">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Sign Up</title>
+    <style>
+      body {
+          background-image: url("{% static 'img/home.png'%}");
+          background-size: cover;
+          background-repeat: no-repeat;
+          background-attachment: fixed;
+      }
+  </style>
 </head>
 <body>
         <!-----------------------Nav-bar-start---------------------->
-        <nav class="flex py-4 fixed w-full top-0 left-0 bg-amber-600 text-white">
+        <nav class="flex py-4 w-full top-0 left-0 text-black bg-amber-100">
             <div class="flex-none w-32 ml-5"></div>
             <div class="flex-1 flex justify-center items-center space-x-10 text-lg font-bold">
                 <a class="transition-transform transform hover:scale-105" href="{%url 'home'%}"><button>Home</button></a>
@@ -19,7 +28,7 @@
         <!---------------------- Signup-div-start--------------------->
     <div class="flex items-center min-h-screen p-4 lg:justify-center">
         <div
-          class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
+          class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md shadow-2xl"
         >
           <div class="p-5 bg-white md:flex-1">
             <h3 class="my-4 text-2xl font-semibold text-gray-700">Account Signup</h3>

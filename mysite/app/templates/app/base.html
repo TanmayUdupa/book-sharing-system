@@ -35,10 +35,15 @@
 
             {% endif %}
         </div> 
-        <div class="flex-2 w-32 flex items-center space-x-2">
+        
+        <div class="flex-2 w-32 space-x-2">
             {% if user.is_authenticated %}
-            <img class="w-auto h-10 rounded scale-125" src="{{ user.profile_pic.url }}"/>
-            <p>{{ user.name }}</p>
+            <a href="{%url 'profile'%}">
+                <div class="flex items-center justify-center">
+                <img class="w-auto h-10 rounded scale-125" src="{{ user.profile_pic.url }}"/>
+                <p class="ml-5">{{ user.name }}</p>
+                </div>
+            </a>
             {% endif %}
         </div>
     </nav>

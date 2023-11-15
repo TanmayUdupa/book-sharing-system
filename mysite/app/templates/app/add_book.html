@@ -3,9 +3,9 @@
 {% block content %}
 <div class="flex items-center min-h-screen p-4 lg:justify-center">
     <div
-      class="flex flex-col overflow-hidden bg-white rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
+      class="flex flex-col overflow-hidden rounded-md shadow-lg max md:flex-row md:flex-1 lg:max-w-screen-md"
     >
-      <div class="p-5 bg-white md:flex-1 mt-7 pt-10">
+      <div class="p-5 bg-white-200 md:flex-1 mt-7 pt-10">
         <h3 class="my-4 text-2xl font-semibold text-gray-700">Add a Book</h3>
         <form method="post" enctype="multipart/form-data">
           {% csrf_token %}

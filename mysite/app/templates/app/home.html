@@ -2,13 +2,25 @@
 
 {% block content %}
 
-<div class="h-screen flex items-center">
-    <div class="ml-24">
-        <div class="text-4xl font-bold mb-4">CONNECT</div>
-        <div class="ml-5 text-4xl font-bold mb-4">SHARE</div>
-        <div class="ml-10 text-4xl font-bold mb-4">EXPLORE</div>
-        <div class="ml-20 text-2xl">the world of books.</div>
-    </div>
+{%load static%}
+<div class="">
+    <div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-8">
+        <div class="transform scale-110 -rotate-6">
+          <img src="/media/1984.jpg" alt="" loading="lazy">
+        </div>
+        <div class="col-start-3 transform scale-75 rotate-6 translate-x-2 translate-y-15">
+          <img src="/mountains-2.jpg" alt="" loading="lazy">
+        </div>
+        <div class="transform scale-150 translate-y-11">
+          <img src="/mountains-3.jpg" alt="" loading="lazy">
+        </div>
+        <div class="transform translate-y-24">
+          <img src="/mountains-4.jpg" alt="" loading="lazy">
+        </div>
+        <div class="row-start-1 col-start-2 col-span-2 transform translate-x-20 translate-y-4">
+          <img src="/mountains-5.jpg" alt="" loading="lazy">
+        </div>
+      </div>
 </div>
 
 {% endblock %}

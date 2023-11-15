@@ -12,5 +12,6 @@ urlpatterns = [
     path('delete_borrowing_request/<int:book_id>/', views.delete_borrowing_request, name="delete_borrowing_request"),
     path('confirm_borrowing_request/', views.confirm_borrowing_request, name="confirm_borrowing_request"),
     path('view_received_requests/', views.view_received_requests, name="view_received_requests"),
-    path('approve_request/<int:request_id>/', views.approve_request, name="approve_request")
+    path('approve_request/<int:request_id>/', views.approve_request, name="approve_request"),
+    path('profile/', views.view_profile, name='profile')
 ]

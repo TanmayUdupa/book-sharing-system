@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.template import loader
-from .models import User, RequestsToBorrow, Book, Genre
+from .models import User, RequestsToBorrow, Book, Genre, ShippedTo
 from django.contrib.auth import login, logout
 from .forms import LoginForm, SignUpForm, AddBookForm
 from django.contrib.auth.hashers import make_password, check_password
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import F
+from django.db.models import F, Q
 def home(request):
     user = request.user
     '''
@@ -152,8 +152,23 @@ def approve_request(request, request_id):
     user = request.user
     requests = RequestsToBorrow.objects.filter(book_id__owner = user, status = "Waiting for request approval", id = request_id)
     for request in requests:
-        request.status = 'Request approved'
-        request.save()
+        shipped_to_borrower = ShippedTo(
+            status = "Delivered",
+            book_id = request.book_id,
+            from_user = user,
+            to_user = request.borrower_id,
+            transaction_type = "Borrowing"
+        )
+        shipped_to_borrower.save()
+        returned_to_owner = ShippedTo(
+            status = "Delivered",
+            book_id = request.book_id,
+            from_user = request.borrower_id,
+            to_user = user,
+            transaction_type = "Returning"
+        )
+        returned_to_owner.save()
+        request.delete()
     return JsonResponse({'success':True})
 
 @login_required(login_url='/user_login/')
@@ -173,6 +188,17 @@ def view_profile(request):
         'user' : user,
     }
     return render(request, 'app/profile.html', context=context)
+
+@login_required(login_url='/user_login/')
+def view_shipping_details(request):
+    user = request.user
+    shipping_details = ShippedTo.objects.filter(Q(from_user = user) | Q(to_user = user))
+    context = {
+        'user': user,
+        'shipping_details': shipping_details
+    }
+    return render(request, 'app/view_shipping_details.html',context=context)
+
 
 def user_logout(request):
     logout(request)

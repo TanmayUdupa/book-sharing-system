@@ -2,25 +2,43 @@
 
 {% block content %}
 
-{%load static%}
-<div class="">
+{% load static %}
+<div class="grid grid-flow-row-dense grid-rows-1 grid-cols-3 gap-16" style="grid-template-columns: auto 1fr auto;">
+  <div class="col-start-1 p-10 m-10">
+    <div class="text-center pb-12 md:pb-16">
+      <h1 class="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4" data-aos="zoom-y-out">Welcome to the <br/> world of shared <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">stories!</span></h1>
+    </div>
+    <div class="max-w-3xl mx-auto">
+      <p class="text-3xl text-gray-600 mb-8" data-aos="zoom-y-out" data-aos-delay="150"><span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">Discover, borrow</span> and <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">share</span> books with ease</p>
+    </div>
+    <div class="justify-center flex">
+      {% if not user.is_authenticated %}
+      <button class="px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-gradient-to-r from-blue-500 to-teal-400 rounded-md transition-transform hover:scale-110 hover:shadow-2xl focus:outline-none">Join Now!</button>
+      {% endif%}
+    </div>
+  </div>
+  <div class="col-start-2 flex item-center justify-center">
     <div class="grid grid-flow-col grid-rows-2 grid-cols-3 gap-8">
-        <div class="transform scale-110 -rotate-6">
-          <img src="/media/1984.jpg" alt="" loading="lazy">
-        </div>
-        <div class="col-start-3 transform scale-75 rotate-6 translate-x-2 translate-y-15">
-          <img src="/mountains-2.jpg" alt="" loading="lazy">
-        </div>
-        <div class="transform scale-150 translate-y-11">
-          <img src="/mountains-3.jpg" alt="" loading="lazy">
-        </div>
-        <div class="transform translate-y-24">
-          <img src="/mountains-4.jpg" alt="" loading="lazy">
-        </div>
-        <div class="row-start-1 col-start-2 col-span-2 transform translate-x-20 translate-y-4">
-          <img src="/mountains-5.jpg" alt="" loading="lazy">
-        </div>
+      <div class="transform scale-100 -rotate-6 -translate-x-5 transition-transform hover:scale-110 hover:rotate-6">
+        <img class="h-80" src="../../../media/images/1984.jpg" loading="lazy">
       </div>
+      <div class="transform scale-100 rotate-6 -translate-x-5 translate-y-5 transition-transform hover:scale-110 hover:-rotate-6">
+        <img class="h-80" src="../../../media/images/All_the_Light_We_Cannot_See.jpg" alt="" loading="lazy">
+      </div>
+      <div class="transition-transform hover:scale-110">
+        <img class="h-80" src="../../../media/images/lord_of_the_rings.jpg" alt="" loading="lazy">
+      </div>
+      <div class="transition-transform hover:scale-110">
+        <img class="h-80" src="../../../media/images/bird_box.jpg" alt="" loading="lazy">
+      </div>
+      <div class="transform scale-100 rotate-6 translate-x-6 transition-transform hover:scale-110 hover:-rotate-6">
+        <img class="h-80" src="../../../media/images/harry_potter.jpg" alt="" loading="lazy">
+      </div>
+      <div class="transform scale-100 -rotate-6 translate-x-5 translate-y-5 transition-transform hover:scale-110 hover:rotate-6">
+        <img class="h-80" src="../../../media/images/the-diary-of-a-young-girl.jpg" alt="" loading="lazy">
+      </div>
+    </div>
+  </div>
+  <div class="col-start-3"></div>
 </div>
-
 {% endblock %}

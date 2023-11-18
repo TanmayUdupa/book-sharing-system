@@ -128,7 +128,20 @@ def create_borrowing_request(request, book_id):
             due_date = timezone.now() + timedelta(days=30),
         )
         requestsToBorrow.save()
-        return JsonResponse({'success':True})
+
+        response_data = {
+            'success': True,
+            'book': {
+                'id' : book.id,
+                'title': book.title,
+                'status': requestsToBorrow.status,
+                'owner': {
+                    'name': book.owner.name
+                }
+            }
+        }
+
+        return JsonResponse(response_data)
 
 @csrf_protect
 def delete_borrowing_request(request, book_id):

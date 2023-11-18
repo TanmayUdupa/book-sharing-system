@@ -1,13 +1,14 @@
 {% extends './base.html' %}
 
 {% block content %}
-        <table class="w-full border-collapse">
+        <div class="w-full flex items-center justify-center">
+        <table class="w-auto border-collapse shadow-lg">
             <thead>
-                <tr class="border-b">
-                    <th class="text-left text-xl py-2 px-4">Borrower Name</th>
-                    <th class="text-left text-xl py-2 px-4">Request Date</th>
-                    <th class="text-left text-xl py-2 px-4">Book Name</th>
-                    <th class="text-left text-xl py-2 px-4">Due Date</th>
+                <tr class="border-b border-t">
+                    <th class="text-left text-xl py-2 px-10 text-center">Borrower Name</th>
+                    <th class="text-left text-xl py-2 px-10 text-center">Request Date</th>
+                    <th class="text-left text-xl py-2 px-10 text-center">Book Name</th>
+                    <th class="text-left text-xl py-2 px-10 text-center">Due Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +23,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     <script>
         $(document).ready(function(){
                 
@@ -46,6 +48,7 @@
                 $('.approve').on('click', function(event){
                     event.preventDefault();
                     var request_id = $(this).attr("id")
+                    var $tr = $(this).closest('tr');
                     if(confirm("Do you want to approve this request?")){
                         $.ajax({
                             url : '/approve_request/'+request_id+'/',
@@ -56,6 +59,7 @@
                             success: function(response){
                                 if(response.success){
                                     console.log("Approved")
+                                    $tr.remove()
                                 }else{
                                     console.log("Failed")
                                 }

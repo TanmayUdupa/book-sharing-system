@@ -106,6 +106,12 @@
                             .addClass('bg-gray-300 text-gray-600 cursor-not-allowed')
                             .text('Already Requested');
 
+                        var newRow = $("<tr class='border-b' id="+response.book.id+">");
+                        newRow.append("<td class='text-left py-2 px-4'>"+response.book.title+"</td>");
+                        newRow.append("<td class='text-left py-2 px-4'>"+response.book.status+"</td>");
+                        newRow.append("<td class='text-left py-2 px-4'>"+response.book.owner.name+"</td>");
+                        newRow.append("<td><button class='delete-button bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded' id="+response.book.id+">Delete</button></td>");
+                        $("tbody").append(newRow);
                     }else{
                         console.log('Error')
                     }
@@ -148,10 +154,11 @@
         return cookieValue;
     }
 
-        $('.delete-button').on('click', function(event){
+        $('body').on('click','.delete-button', function(event){
             event.preventDefault();
             var book_id = $(this).attr("id")
             var $tr = $(this).closest('tr');
+            var $addButton = $('.add-book-button[id="' + book_id + '"]');
             if(confirm("Do you want to delete this item?")){
                 $.ajax({
                     url : '/delete_borrowing_request/'+book_id+'/',
@@ -163,6 +170,10 @@
                         if(response.success){
                             console.log("Success delete")
                             $tr.remove()
+                            $addButton.removeAttr('disabled')
+                            .addClass('bg-blue-500')
+                            .removeClass('bg-gray-300 text-gray-600 cursor-not-allowed')
+                            .text('Add This Book');
                         }else{
                             console.log("Failed")
                         }
@@ -172,7 +183,6 @@
         });
     });
 
-    $(document).ready(function(){
                 
         var csrftoken = getCookie('csrftoken');
         
@@ -211,8 +221,6 @@
                             }
                         }
                     })
-            });
-        });    
-
+            });   
 </script>
 {% endblock %}

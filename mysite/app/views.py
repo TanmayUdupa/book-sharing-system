@@ -11,19 +11,18 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import F, Q
 def home(request):
-    '''
     user = request.user
+    '''
     requested_books = RequestsToBorrow.objects.filter(borrower_id=user)
     requested_books_with_details = requested_books.select_related('book_id')
     requested_books_with_details = requested_books_with_details.annotate(
         book_status=F('status')
     )
+    '''
     context = {
         'user': user,
-        'requested_books':requested_books_with_details,
         }
-    '''
-    return render(request, "app/home.html")
+    return render(request, "app/home.html", context = context)
 
 @login_required(login_url='/user_login/')
 def feed(request):
@@ -129,7 +128,20 @@ def create_borrowing_request(request, book_id):
             due_date = timezone.now() + timedelta(days=30),
         )
         requestsToBorrow.save()
-        return JsonResponse({'success':True})
+
+        response_data = {
+            'success': True,
+            'book': {
+                'id' : book.id,
+                'title': book.title,
+                'status': requestsToBorrow.status,
+                'owner': {
+                    'name': book.owner.name
+                }
+            }
+        }
+
+        return JsonResponse(response_data)
 
 @csrf_protect
 def delete_borrowing_request(request, book_id):

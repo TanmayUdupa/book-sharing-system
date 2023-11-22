@@ -197,8 +197,10 @@ def view_received_requests(request):
 @login_required(login_url='/user_login/')
 def view_profile(request):
     user = request.user
+    user_books = Book.objects.filter(owner=user)
     context = {
         'user' : user,
+        'user_books':user_books
     }
     return render(request, 'app/profile.html', context=context)
 

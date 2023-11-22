@@ -60,7 +60,7 @@ class BookReview(models.Model):
     reviewer_id = models.ForeignKey(User, on_delete=models.CASCADE)
     book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
     review_text = models.TextField(max_length=200)
-    rating = models.IntegerField()
+    rating = models.DecimalField(decimal_places = 1, max_digits=2)
 
 class ShippedTo(models.Model):
     status = models.CharField(max_length = 50)

@@ -17,5 +17,6 @@ urlpatterns = [
     path('view_shipping details/', views.view_shipping_details, name="view_shipping_details"),
     path('review_book/', views.review_book, name="review_book"),
     path('view_books_by_genre/', views.view_books_by_genre, name="view_books_by_genre"),
-    path('show_books_of_genre/<int:genre_id>/', views.show_books_of_genre, name = "show_books_of_genre")
+    path('show_books_of_genre/<int:genre_id>/', views.show_books_of_genre, name = "show_books_of_genre"),
+    path('edit_profile', views.edit_profile, name="edit_profile"),
 ]

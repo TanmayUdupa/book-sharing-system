@@ -12,7 +12,7 @@
                 <p class="mb-2"><span class="font-semibold">Address:</span>{{user.address}}</p>
                 <p><span class="font-semibold">Rating:</span> {{ user.rating }}</p>
             </div>
-            <button  class="ml-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button>
+            <a href="{% url 'edit_profile' %}"><button  class="ml-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button></a>
         </div>
 
         <div class="rounded text-center py-8 overflow-y-auto">

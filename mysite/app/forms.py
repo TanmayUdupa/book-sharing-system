@@ -1,5 +1,5 @@
 from django import forms
-from .models import ShippedTo
+from .models import ShippedTo, User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 class LoginForm(forms.Form):
@@ -117,3 +117,21 @@ class ReviewForm(forms.Form):
         for shipped in to_be_reviewed:
             details.add(shipped.book_id)
         self.fields['book_title'].choices = tuple((detail.id, detail.title) for detail in details)
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['name', 'profile_pic', 'address']
+
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': 'px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200',
+                'autofocus': True,
+            }),
+            'profile_pic': forms.FileInput(attrs={
+                'class': 'px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200',
+            }),
+            'address': forms.TextInput(attrs={
+                'class': 'px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200',
+            }),
+        }

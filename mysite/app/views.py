@@ -174,6 +174,7 @@ def approve_request(request, request_id):
             transaction_type = "Borrowing"
         )
         shipped_to_borrower.save()
+        request.book_id.status = "NOT AVAILABLE"
         returned_to_owner = ShippedTo(
             status = "Delivered",
             book_id = request.book_id,
@@ -182,6 +183,7 @@ def approve_request(request, request_id):
             transaction_type = "Returning"
         )
         returned_to_owner.save()
+        request.book_id.status = "AVAILABLE"
         request.delete()
     return JsonResponse({'success':True})
 
@@ -243,7 +245,6 @@ def review_book(request):
                 book = Book.objects.filter(id=book_id).first()
                 review = BookReview(reviewer_id = user, book_id = book, review_text = review_text, rating = rating)
                 review.save()
-                print("aaaa")
                 genre = book.genre
                 calc_rating(book.owner, genre, rating, user_rating)
                 form = ReviewForm(user = user)
@@ -254,6 +255,34 @@ def review_book(request):
     context = {'user': user, 'form': form, 'error': error}
     return render(request, 'app/review_book.html',context=context)
 
+@login_required(login_url='/user_login/')
+def view_books_by_genre(request):
+    user = request.user
+    genres = Genre.objects.all()
+    context = {
+        'user': user,
+        'genres': genres
+    }
+    return render(request, 'app/view_books_by_genre.html',context=context)
+
+@login_required(login_url='/user_login/')
+def show_books_of_genre(request, genre_id):
+    user = request.user
+    available_books = Book.objects.filter(genre__id = genre_id).exclude(owner = user)
+    requested_books = RequestsToBorrow.objects.filter(borrower_id=user)
+    requested_book_ids = requested_books.values_list('book_id', flat=True)
+    requested_books_with_details = requested_books.select_related('book_id')
+    requested_books_with_details = requested_books_with_details.annotate(
+        book_status=F('status')
+    )
+
+    context = {
+        'user': user,
+        'available_books': available_books,
+        'requested_book_ids':requested_book_ids,
+        'requested_books':requested_books_with_details,
+        }
+    return render(request, 'app/feed.html', context=context)
 
 def user_logout(request):
     logout(request)

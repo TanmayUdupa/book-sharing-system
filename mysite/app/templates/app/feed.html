@@ -49,7 +49,7 @@
                     <div class="mt-2 flex items-center justify-center">
                         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.publication_year}}</span>
                         <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.genre.name}}</span>
-                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{book.condition_desc}}</span>
+                        <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Condition: {{book.condition_desc}}</span>
                     </div>
                     <div class="mt-4 flex justify-center">
                         {% if book.id in requested_book_ids %}

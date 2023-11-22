@@ -202,9 +202,11 @@ def view_received_requests(request):
 def view_profile(request):
     user = request.user
     user_books = Book.objects.filter(owner=user)
+    reviews = BookReview.objects.filter(book_id__in=user_books)
     context = {
         'user' : user,
-        'user_books':user_books
+        'user_books':user_books,
+        'reviews':reviews,
     }
     return render(request, 'app/profile.html', context=context)
 

@@ -1,0 +1,24 @@
+{% extends './base.html' %}
+
+{% block content %}
+    <div class="flex flex-wrap justify-center">
+        {% if genres %}
+            {%for genre in genres %}
+                <a href="{% url 'show_books_of_genre' genre.id %}" class="genre max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 bg-white relative transition-transform hover:scale-105">
+                    <div class="genre max-w-sm rounded overflow-hidden shadow-lg mx-4 my-4 bg-white relative transition-transform hover:scale-105" id = "{{genre.id}}">
+                        <div class="px-6 py-4">
+                            <div class="font-bold text-xl mb-2">{{genre.name}}</div>
+                            <p class="text-gray-700 text-base">{{genre.description}}</p>
+                            <div class="mt-2 flex items-center justify-center">
+                                {% if genre.average_rating > 0 %}
+                                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Average rating: {{genre.average_rating}}</span>
+                                {% endif %}
+                                <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">Books: {{genre.no_of_books}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {%endfor%}
+        {% endif%}
+    </div>
+{% endblock %}

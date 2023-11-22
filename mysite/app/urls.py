@@ -14,5 +14,8 @@ urlpatterns = [
     path('view_received_requests/', views.view_received_requests, name="view_received_requests"),
     path('approve_request/<int:request_id>/', views.approve_request, name="approve_request"),
     path('profile/', views.view_profile, name='profile'),
-    path('view_shipping details/', views.view_shipping_details, name="view_shipping_details")
+    path('view_shipping details/', views.view_shipping_details, name="view_shipping_details"),
+    path('review_book/', views.review_book, name="review_book"),
+    path('view_books_by_genre/', views.view_books_by_genre, name="view_books_by_genre"),
+    path('show_books_of_genre/<int:genre_id>/', views.show_books_of_genre, name = "show_books_of_genre")
 ]

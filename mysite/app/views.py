@@ -1,15 +1,16 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse,JsonResponse
 from django.template import loader
-from .models import User, RequestsToBorrow, Book, Genre, ShippedTo
+from .models import User, RequestsToBorrow, Book, Genre, ShippedTo, BookReview
 from django.contrib.auth import login, logout
-from .forms import LoginForm, SignUpForm, AddBookForm
+from .forms import LoginForm, SignUpForm, AddBookForm, ReviewForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import F, Q
+from statistics import mean
 def home(request):
     user = request.user
     '''
@@ -173,6 +174,7 @@ def approve_request(request, request_id):
             transaction_type = "Borrowing"
         )
         shipped_to_borrower.save()
+        request.book_id.status = "NOT AVAILABLE"
         returned_to_owner = ShippedTo(
             status = "Delivered",
             book_id = request.book_id,
@@ -181,6 +183,7 @@ def approve_request(request, request_id):
             transaction_type = "Returning"
         )
         returned_to_owner.save()
+        request.book_id.status = "AVAILABLE"
         request.delete()
     return JsonResponse({'success':True})
 
@@ -214,6 +217,74 @@ def view_shipping_details(request):
     }
     return render(request, 'app/view_shipping_details.html',context=context)
 
+def calc_rating(user, genre, rating, user_rating):
+    if user.rating == 0:
+        user.rating = user_rating
+    else:
+        user.rating = (user.rating + user_rating) / 2
+    user.save()
+    reviews = BookReview.objects.filter(book_id__genre = genre)
+    ratings = []
+    for review in reviews:
+        ratings.append(review.rating)
+    genre.average_rating = mean(ratings)
+    genre.save()
+
+@login_required(login_url='/user_login/')
+def review_book(request):
+    user = request.user
+    error = 0
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, user = user)
+        if form.is_valid():
+            book_id = form.cleaned_data['book_title']
+            review_text = form.cleaned_data['review_text']
+            rating = form.cleaned_data['rating']
+            user_rating = form.cleaned_data['user_rating']
+            if rating < 1 or rating > 5 or user_rating < 1 or user_rating > 5:
+                error = 1
+            else:
+                book = Book.objects.filter(id=book_id).first()
+                review = BookReview(reviewer_id = user, book_id = book, review_text = review_text, rating = rating)
+                review.save()
+                genre = book.genre
+                calc_rating(book.owner, genre, rating, user_rating)
+                form = ReviewForm(user = user)
+        else:
+            print(form.errors)
+    else:
+        form = ReviewForm(user=user)
+    context = {'user': user, 'form': form, 'error': error}
+    return render(request, 'app/review_book.html',context=context)
+
+@login_required(login_url='/user_login/')
+def view_books_by_genre(request):
+    user = request.user
+    genres = Genre.objects.all()
+    context = {
+        'user': user,
+        'genres': genres
+    }
+    return render(request, 'app/view_books_by_genre.html',context=context)
+
+@login_required(login_url='/user_login/')
+def show_books_of_genre(request, genre_id):
+    user = request.user
+    available_books = Book.objects.filter(genre__id = genre_id).exclude(owner = user)
+    requested_books = RequestsToBorrow.objects.filter(borrower_id=user)
+    requested_book_ids = requested_books.values_list('book_id', flat=True)
+    requested_books_with_details = requested_books.select_related('book_id')
+    requested_books_with_details = requested_books_with_details.annotate(
+        book_status=F('status')
+    )
+
+    context = {
+        'user': user,
+        'available_books': available_books,
+        'requested_book_ids':requested_book_ids,
+        'requested_books':requested_books_with_details,
+        }
+    return render(request, 'app/feed.html', context=context)
 
 def user_logout(request):
     logout(request)

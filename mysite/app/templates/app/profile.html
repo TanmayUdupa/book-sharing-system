@@ -1,6 +1,61 @@
 {% extends './base.html' %}
 
 {% block content %}
-    <img src="{{ user.profile_pic.url }}"/>
-    <span>{{ user.name }}</span>
+    <span class="text-2xl font-semibold m-4 text-center">Your profile</span>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="rounded flex items-center justify-center m-9">
+            <img src="{{ user.profile_pic.url }}" class="h-56 rounded m-5" />
+            <div class="ml-4">
+                <p class="mb-2 text-xl"><span class="font-semibold">Name:</span> {{ user.name }}</p>
+                <p class="mb-2 text-xl"><span class="font-semibold">Email:</span> {{ user.email }}</p>
+                <p class="mb-2 text-xl"><span class="font-semibold">Address:</span>{{user.address}}</p>
+                <p class="text-xl"><span class="font-semibold ">Rating:</span> {{ user.rating }}</p>
+            </div>
+            <a href="{% url 'edit_profile' %}"><button  class="ml-10 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Edit Profile</button></a>
+        </div>
+
+        <div class="rounded text-center py-8 overflow-y-auto">
+            <h2 class="text-2xl font-semibold mb-4">Books Contributed</h2>
+
+            <div class="flex overflow-x-auto">
+                {% for book in user_books %}
+                    <div class="border border-gray-300 bg-white rounded-md overflow-hidden flex-shrink-0 w-48 mx-2">
+                        <img class="h-56 w-full object-cover" src="{{ book.cover_image.url }}" alt="{{ book.title }}">
+                        <div class="p-4 text-center">
+                            <p class="text-lg font-semibold">{{ book.title }}</p>
+                            <p class="text-gray-700">{{ book.author }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="flex justify-center items-center">
+            <span class="text-3xl">Book Reviews</span>
+        </div>
+        <div class="mt-5 flex justify-center items-center">
+            <table  class="w-auto border-collapse shadow-lg rounded">
+                <thead>
+                  <tr class="border-b border-t">
+                    <th class="text-left text-xl py-2 px-10 text-center">Reviewer</th>
+                    <th class="text-left text-xl py-2 px-10 text-center">Book Title</th>
+                    <th class="text-left text-xl py-2 px-10 text-center">Review Text</th>
+                    <th class="text-left text-xl py-2 px-10 text-center">Rating</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for review in reviews %}
+                    <tr  class="border-b">
+                      <td class="text-left py-2 px-4">{{ review.reviewer_id.name }}</td>
+                      <td class="text-left py-2 px-4">{{ review.book_id.title }}</td>
+                      <td class="text-left py-2 px-4">{{ review.review_text }}</td>
+                      <td class="text-left py-2 px-4">{{ review.rating }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+        </div>
+    </div>
 {% endblock %}

@@ -3,7 +3,7 @@ from django.http import HttpResponse,JsonResponse
 from django.template import loader
 from .models import User, RequestsToBorrow, Book, Genre, ShippedTo, BookReview
 from django.contrib.auth import login, logout
-from .forms import LoginForm, SignUpForm, AddBookForm, ReviewForm
+from .forms import LoginForm, SignUpForm, AddBookForm, ReviewForm, EditProfileForm
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
@@ -11,6 +11,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.db.models import F, Q
 from statistics import mean
+
 def home(request):
     user = request.user
     '''
@@ -200,8 +201,12 @@ def view_received_requests(request):
 @login_required(login_url='/user_login/')
 def view_profile(request):
     user = request.user
+    user_books = Book.objects.filter(owner=user)
+    reviews = BookReview.objects.filter(book_id__in=user_books)
     context = {
         'user' : user,
+        'user_books':user_books,
+        'reviews':reviews,
     }
     return render(request, 'app/profile.html', context=context)
 
@@ -283,6 +288,18 @@ def show_books_of_genre(request, genre_id):
         'requested_books':requested_books_with_details,
         }
     return render(request, 'app/feed.html', context=context)
+
+@csrf_protect
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+            form = EditProfileForm(instance=user)
+    return render(request, 'app/edit_profile.html', {'form': form})
 
 def user_logout(request):
     logout(request)
